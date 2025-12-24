@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HackLens</title>
+  <style>
+    :root {
+      --primary: #3b82f6;
+      --secondary: #8b5cf6;
+      --bg: #111;
+      --card-bg: #1e1e1e;
+      --text: #fff;
+      --text-secondary: #aaa;
+    }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family:sans-serif; background:var(--bg); color:var(--text); display:flex; flex-direction:column; align-items:center; justify-content:flex-start; min-height:100vh; }
+    h1,h2,h3,h4,h5,p { margin:0; }
+    h1 { font-size:42px; margin:20px 0; text-align:center; }
+    button { padding:10px 20px; margin:5px; cursor:pointer; border:none; border-radius:10px; font-size:16px; }
+    #bubble { position:absolute; top:50%; left:50%; width:80px; height:80px; background:rgba(255,255,255,0.7); border-radius:50%; transform:translate(-50%, -50%); pointer-events:none; filter:blur(2px); }
+    .card { background:var(--card-bg); border-radius:12px; padding:15px; margin:10px 0; width:300px; }
+    .flex { display:flex; gap:10px; align-items:center; }
+    .hidden { display:none; }
+  </style>
+</head>
+<body>
+
+<h1>HackLens</h1>
+
+<div class="flex">
+  <button id="snapBtn" style="background:var(--primary); color:#fff;">📸 Take Photo</button>
+  <button id="uploadBtn" style="background:var(--secondary); color:#fff;">📂 Upload Image</button>
+</div>
+
+<input type="file" id="fileInput" class="hidden" accept="image/*">
+
+<div id="suggestions" class="hidden">
+  <div class="card">
+    <h2>Suggested Outfit</h2>
+    <p>Neutral colors with soft textures. Trendy vibe 8/10.</p>
+  </div>
+  <div class="card">
+    <h2>Color Palette</h2>
+    <p>Primary: Blue, Accent: Beige, Mood: Calm & stylish.</p>
+  </div>
+  <div class="card">
+    <h2>Skin Care</h2>
+    <p>Moisturizer twice daily. Glow-enhancing routine recommended.</p>
+  </div>
+</div>
+
+<div id="bubble"></div>
+
+<script>
+  // Simulate analysis
+  const snapBtn = document.getElementById('snapBtn');
+  const uploadBtn = document.getElementById('uploadBtn');
+  const suggestions = document.getElementById('suggestions');
+  const fileInput = document.getElementById('fileInput');
+  const bubble = document.getElementById('bubble');
+
+  function showSuggestions() { suggestions.classList.remove('hidden'); }
+
+  snapBtn.onclick = showSuggestions;
+  uploadBtn.onclick = () => fileInput.click();
+  fileInput.onchange = showSuggestions;
+
+  // Bubble floating animation
+  let pos = {x: window.innerWidth/2, y: window.innerHeight/2};
+  let target = {x: pos.x, y: pos.y};
+  document.addEventListener('mousemove', e => { target.x = e.clientX; target.y = e.clientY; });
+  function animate() {
+    pos.x += (target.x - pos.x) * 0.05;
+    pos.y += (target.y - pos.y) * 0.05;
+    bubble.style.left = pos.x + 'px';
+    bubble.style.top = pos.y + 'px';
+    requestAnimationFrame(animate);
+  }
+  animate();
+</script>
+
+</body>
+</html>
